@@ -2,6 +2,7 @@ package com.azuresamples.msalandroidkotlinapp
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -52,7 +53,7 @@ class SingleAccountModeFragment : Fragment() {
                 }
 
                 override fun onError(exception: MsalException) {
-                    txt_log.text = exception.toString()
+                    //txt_log.text = exception.toString()
                 }
             })
 
@@ -181,7 +182,7 @@ class SingleAccountModeFragment : Fragment() {
             }
 
             override fun onError(exception: MsalException) {
-                txt_log.text = exception.toString()
+                //txt_log.text = exception.toString()
             }
         })
     }
@@ -265,11 +266,11 @@ class SingleAccountModeFragment : Fragment() {
      * Make an HTTP request to obtain MSGraph data
      */
     private fun callGraphAPI(authenticationResult: IAuthenticationResult) {
-        MSGraphRequestWrapper.callGraphAPIWithVolley(
+        MSGraphRequestWrapper.requestProfilePicture(
             context as Context,
             msgraph_url.text.toString(),
             authenticationResult.accessToken,
-            Response.Listener<JSONObject> { response ->
+            Response.Listener<Bitmap?> { response ->
                 /* Successfully called graph, process data and send to UI */
                 Log.d(TAG, "Response: $response")
                 displayGraphResult(response)
@@ -292,15 +293,15 @@ class SingleAccountModeFragment : Fragment() {
     /**
      * Display the graph response
      */
-    private fun displayGraphResult(graphResponse: JSONObject) {
-        txt_log.text = graphResponse.toString()
+    private fun displayGraphResult(graphResponse: Bitmap?) {
+        txt_log.setImageBitmap(graphResponse)
     }
 
     /**
      * Display the error message
      */
     private fun displayError(exception: Exception) {
-        txt_log.text = exception.toString()
+        // txt_log.text = exception.toString()
     }
 
     /**
